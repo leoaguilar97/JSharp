@@ -15,7 +15,7 @@ class C3DConversor {
         this.info = {
             resultCode: initial_code,
             temporals: 0,
-            labels: 38,
+            labels: 48,
             data: {},
             P: "P",
             K: "H",
@@ -471,7 +471,7 @@ class C3DConversor {
                     return { return: expNode.getValue(), type: validator.OpTyp.DBL };
 
                 case "string":
-                    return this.processString(expNode.getValue());
+                    return this.processString(expNode.getRawValue());
 
                 case "char":
                     let charcode = expNode.getValue().replace("'", "").charCodeAt(0);
@@ -1113,6 +1113,107 @@ class C3DConversor {
             return result;
         }
 
+        // nuevo
+        this.processComposCall = function (cNode) {
+            let current = this;
+            let result = {};
+
+            cNode.ApplyAndGetData({
+                "2": function (nodes) {
+                    let val = nodes[0];
+                    let fn = nodes[1];
+                    let tmpAccess;
+                    if (val.type == "terminal") {
+                        tmpAccess = current.processAccess(val);
+                    }
+                    else {
+                        tmpAccess = current.processLiteral(val);
+                    }
+
+                    if (!tmpAccess || tmpAccess.type != "string") {
+                        throw {
+                            msg: `Las funciones nativas solo pueden ser aplicadas a [Strings] y [Arrays], se encontro una expresion de tipo [${tmpAccess ? tmpAccess.type : "[indefinido]"}]`,
+                            token: `${val.getValue()}`,
+                            node: fn
+                        };
+                    }
+
+                    let fname = fn.getValue().toLowerCase();
+                    let curr_res = null;
+                    let tmp;
+                    switch (fname) {
+                        case "length":
+                            tmp = current.info.call({
+                                name: "__strlen__",
+                                params: [{
+                                    val: tmpAccess.return,
+                                    type: tmpAccess.type,
+                                    relative: 0
+                                }],
+                                return: true,
+
+                                funct_info: {
+                                    params: 1,
+                                    size: 0,
+                                    return: true,
+                                    return_pos: 1,
+                                    return_relative: true
+                                }
+                            });
+
+                            result = { return: tmp, type: types.INT };
+                        case "touppercase":
+                            current.info.call({
+                                name: "__upper__",
+                                params: [{
+                                    val: tmpAccess.return,
+                                    type: tmpAccess.type,
+                                    relative: 0
+                                }],
+                                return: false,
+
+                                funct_info: {
+                                    params: 1,
+                                    size: 0,
+                                    return: false,
+                                    return_pos: -1,
+                                    return_relative: false
+                                }
+                            });
+
+                            result = tmpAccess;
+                            break;
+                        case "tolowercase":
+                            current.info.call({
+                                name: "__lower__",
+                                params: [{
+                                    val: tmpAccess.return,
+                                    type: tmpAccess.type,
+                                    relative: 0
+                                }],
+                                return: false,
+
+                                funct_info: {
+                                    params: 1,
+                                    size: 0,
+                                    return: false,
+                                    return_pos: -1,
+                                    return_relative: false
+                                }
+                            });
+
+                            result = tmpAccess;
+                            break;
+                        default:
+                            throw { msg: `La funcion nativa ${fname} aplicada al tipo de dato [String] no existe`, token: `${val.getValue()}`, node: fn };
+                    }
+                },
+                sendAsArray: true
+            })
+
+            return result;
+        }
+
         this.processPrint = function (printNode, breakLine) {
             let expChild = printNode.getChild(1);
             let r = this.processNode(expChild, { funct: this.info.data });
@@ -1371,6 +1472,12 @@ class C3DConversor {
                     result.accepted = true;
                     break;
 
+                //nuevo
+                case "compos_call":
+                    result = this.processComposCall(node);
+                    result.accepted = true;
+                    break;
+
                 case "retornar":
                     result = this.processReturn(node);
                     result.accepted = true;
@@ -1498,9 +1605,68 @@ var ppow_base_pos, ppow__base, pow_exp_pos, pow_exp,
 # utilizado en __compare_strings__
 var cs_first_curr_char, cs_first_heap_pos, ccss_first_pos,
 	cs_ret, cs_ret_pos, ccss_secnd_curr_char,
-	cs_secnd_heap_pos, cs_secnd_pos;
+    cs_secnd_heap_pos, cs_secnd_pos;
+    
+# utilizado en __strlen__
+var sssle_stack_pos, ssle_heap_pos, sle_length, 
+    sle_curr_char;
+
+# Utilizado en __upper__
+var upp_curr_char, upp_heap_pos;
+
+
+# Utilizado en __lower__
+var llow_currr_char, llow_hheeap_poos;
 
 goto l0;
+
+proc __upper__ begin
+	upp_heap_pos = stack[P];
+	
+	l40:
+	upp_curr_char = heap[upp_heap_pos];
+	if (upp_curr_char <= 0) goto l41;
+	
+	if (upp_curr_char < 97) goto l43;
+	if (upp_curr_char > 132) goto l43;
+	goto l42;
+	
+	l43:
+	upp_heap_pos = upp_heap_pos + 1;
+	goto l40;
+	
+	# restarle 32 para volverlo upcase
+	l42:
+	upp_curr_char = upp_curr_char - 32;
+	heap[upp_heap_pos] = upp_curr_char;
+	goto l43;	
+		
+	l41:
+end
+
+proc __lower__ begin
+llow_hheeap_poos = stack[P];
+	
+	l44:
+	llow_currr_char = heap[llow_hheeap_poos];
+	if (llow_currr_char <= 0) goto l45;
+	
+	if (llow_currr_char < 65) goto l46;
+	if (llow_currr_char > 90) goto l46;
+	goto l47;
+	
+	l46:
+	llow_hheeap_poos = llow_hheeap_poos + 1;
+	goto l44;
+	
+	# sumarle 32 para volverlo lowcase
+	l47:
+	llow_currr_char = llow_currr_char + 32;
+	heap[llow_hheeap_poos] = llow_currr_char;
+	goto l46;	
+		
+	l45:
+end
 
 proc __print__ begin
     pos = stack[P];
@@ -1909,6 +2075,24 @@ proc __compare_strings__ begin
 	l36:
 	cs_ret_pos = P + 2;
 	stack[cs_ret_pos] = cs_ret;
+end
+
+proc __strlen__ begin
+	sssle_stack_pos = P + 0;
+	ssle_heap_pos = stack[sssle_stack_pos];
+	
+	sle_length = 0;
+	# iterar hasta que la posicion sea 0
+	l38:
+	sle_curr_char = heap[ssle_heap_pos];
+	if (sle_curr_char <= 0) goto l39;
+	sle_length = sle_length + 1;
+	ssle_heap_pos = ssle_heap_pos + 1;
+	goto l38;
+	
+	l39:
+	sssle_stack_pos = P + 1;
+	stack[sssle_stack_pos] = sle_length;
 end
 
 # CODIGO PROGRAMA

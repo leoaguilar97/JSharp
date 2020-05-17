@@ -693,6 +693,8 @@ call
   : identifier LEFT_PAREN exp_list RIGHT_PAREN { let pars = yy.createNode("params", $3); $$ = yy.createNode("call", [$1, pars]); }
   | identifier LEFT_PAREN call_params_list_with_id RIGHT_PAREN
   | identifier LEFT_PAREN RIGHT_PAREN { $$ = yy.createNode("call", [$1]); }
+  | identifier POINT identifier LEFT_PAREN RIGHT_PAREN { $$ = yy.createNode("compos_call", [$1, $3]); }
+  | string_literal POINT identifier LEFT_PAREN RIGHT_PAREN { $$ = yy.createNode("compos_call", [$1, $3]); }
   ;
 
 // lista de llamadas de parametro con identificador

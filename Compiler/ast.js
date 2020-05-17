@@ -176,6 +176,7 @@ exports.Node = function (value, type, line, col) {
             }
         }
         catch (error) {
+            console.trace(error);
             error.type = "SEMANTICO";
 
             error.line = 0;
