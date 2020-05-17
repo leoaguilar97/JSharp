@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Compilador JSharp - IDE</title>
+		<meta charset="UTF-8">
+		<link rel='shortcut icon' type='image/x-icon' href='./public/favicon.ico' />
+		<meta name="description" content="jsharp compiler.">
+		<meta name="keywords" content="jsharp compiler">
+		<meta property="og:title" content=""/>
+		<meta property="og:site_name" content="jsharp Compiler"/>
+		<meta property="og:description" content="Compiler for jsharp"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/css/main.css" />
+		<style type="text/css">
+			html, body {
+			height: 100%;
+			min-height: 100%;
+			margin: 0;
+			padding: 0;
+			}
+			.split-pane-divider{
+			background: #aaa;
+			}
+			#left-component {
+			width: 20%;
+			/*                min-width: 20vw;
+			max-width: 20vw;*/
+			background-color: #337ab7;
+			}
+			#right-left-component {
+			width: 100%;
+			background-color: #f5f5f5;
+			}
+			#right-right-component {
+			left: 100%;
+			margin-left:1px;
+			/*min-width: 15em;*/
+			background-color: #f5f5f5;
+			}
+			#top-component {
+			height: 75%;
+			position: relative;
+			background-color: #f5f5f5;
+			}
+			#my-divider {
+			left: 20%; /* Same as left component width */
+			width: 2px;
+			}
+			#my-divider1 {
+			top: 75%;
+			height: 7px;
+			background-color:#bdbdbd;
+			}
+			#my-divider2 {
+			left: 100%; /* Same as left component width */
+			width: 1px;
+			}
+			#bottom-component {
+			background-color: #f5f5f5;
+			top:75%;
+			margin-top: 1px;
+			}
+			#right-component {
+			background-color: #f5f5f5;
+			/*                max-width:80vw;
+			min-width:80vw;
+			min-width:17em;*/
+			left: 20%;  /* Same as left component width */
+			/*margin-left: 2px;  /* Same as divider width */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" style="width:100%;padding:0px;margin:0px">
+			<div class="col-sm-12" style="margin:0px;padding:0px">
+				<div style="height:100vh">
+					<div class="split-pane fixed-left">
+						<div class="split-pane-component " id="left-component" style="background-color: #123433;">
+							<div style="background-color: #123433; padding:10px 0px 0px 0px">
+								<a id="btn_close_header" onclick="fold_left_bar();">
+									<h4 id="header_logo" style="width:100%;text-align:center;margin:0px; border-bottom: 0px solid #d9f2f1; padding-bottom: 0px;">
+								<a  href="/">
+								<span class="glyphicon glyphicon-grain" style="padding: 5px; border: 3px solid;" aria-hidden="true"></span> 
+								<span class="to_be_hidden">
+								&nbsp;&nbsp;JSharp
+								</span>
+								</a>
+								</h4>
+								<span class="tagline to_be_hidden">
+									<h1 style="font-size:12px;padding:0px; margin:0px">
+										Proyecto 2 - Compiladores 2              
+									</h1>
+								</span>
+							</div>
+							<div class="to_be_hidden">
+								<ul class="nav nav-tabs nav-stacked text-center" style="background-color: #337ab7; border-bottom:1px solid #658a9e">
+									<li id="navbar-ide"><a href="/">Editor JSharp</a></li>
+								</ul>
+								<div class="addthis_inline_share_toolbox"></div>
+								<!--
+									<center>
+									<script src="https://donorbox.org/install-popup-button.js" type="text/javascript" defer></script>
+									<a class="dbox-donation-button" href="https://donorbox.org/donate-to-onlinegdb" style="background:#5cb85c url(https://d1iczxrky3cnb2.cloudfront.net/white_logo.png) no-repeat 18px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 14px;padding: 6px 17px 6px 56px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #408040; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+									</center> -->
+								<footer class="container-fluid text-center" style="bottom:0px;left:0px;right:0px;position:absolute;padding:3px;">
+									<style type="text/css">
+										#footer a {
+										font-weight: normal;
+										text-decoration: none;
+										}
+										#footer a:hover {
+										color:white;
+										text-decoration: underline;
+										}
+									</style>
+									<div id="footer">
+										<span class="text-center" style="font-weight:normal; border-bottom:1px solid #658a9e">
+											<a href="./public/docs/DocumentacionJSHARP.pdf" target="_blank">Manual Gramatica</a>
+										</span>
+										<div style="clear:both"></div>
+										<span style="float:none;clear:both">&copy; 2020 Leonel Aguilar</span>
+									</div>
+								</footer>
+							</div>
+						</div>
+						<div class="split-pane-divider hide" id="my-divider"></div>
+						<div class="split-pane-component" id="right-component">
+                            <div style="padding: 10px 10px 10px 10px;">
+                                %%ast%%
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

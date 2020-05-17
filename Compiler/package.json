@@ -1,0 +1,15 @@
+{
+  "name": "compiler",
+  "version": "1.0.0",
+  "description": "Compilador para el lenguaje Coline",
+  "main": "compiler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Leonel Aguilar",
+  "license": "MIT",
+  "dependencies": {
+    "jison": "^0.4.18",
+    "viz.js": "^2.1.2"
+  }
+}

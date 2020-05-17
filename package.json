@@ -1,0 +1,30 @@
+{
+  "name": "jsharp",
+  "version": "1.0.0",
+  "description": "Compilador para el lenguaje jsharp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoaguilar97/jsharp.git"
+  },
+  "keywords": [
+    "jsharp",
+    "Compilador"
+  ],
+  "author": "Leonel Aguilar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leoaguilar97/jsharp/issues"
+  },
+  "homepage": "https://github.com/leoaguilar97/jsharp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.17.1",
+    "jison": "^0.4.18",
+    "nodemon": "^1.18.10",
+    "path": "^0.12.7"
+  }
+}

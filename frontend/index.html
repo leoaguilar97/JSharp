@@ -1,0 +1,741 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Compilador JSharp - IDE</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Jsharp online">
+		<link rel='shortcut icon' type='image/x-icon' href='./public/favicon.ico' />
+		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./public/css/main.css" />
+		<script>  var main_ide =  true;  </script>
+		<script type="text/javascript" src="./public/js/onlinegdb.js"></script>
+		<script type="text/javascript" src="./public/js/ace.js"></script>
+		<script type="text/javascript" src="./public/js/ext-language_tools.js"></script>
+		<script type="text/javascript" src="./public/js/editor.js" defer></script>
+		<script type="text/javascript" src="./public/js/main.js" defer></script>
+		<style type="text/css">
+			html, body {
+			height: 100%;
+			min-height: 100%;
+			margin: 0;
+			padding: 0;
+			}
+			.split-pane-divider{
+			background: #aaa;
+			}
+			#left-component {
+			width: 20%;
+			/*                min-width: 20vw;
+			max-width: 20vw;*/
+			background-color: #337ab7;
+			}
+			#right-left-component {
+			width: 100%;
+			background-color: #f5f5f5;
+			}
+			#right-right-component {
+			left: 100%;
+			margin-left:1px;
+			/*min-width: 15em;*/
+			background-color: #f5f5f5;
+			}
+			#top-component {
+			height: 75%;
+			position: relative;
+			background-color: #f5f5f5;
+			}
+			#my-divider {
+			left: 20%; /* Same as left component width */
+			width: 2px;
+			}
+			#my-divider1 {
+			top: 75%;
+			height: 7px;
+			background-color:#bdbdbd;
+			}
+			#my-divider2 {
+			left: 100%; /* Same as left component width */
+			width: 1px;
+			}
+			#bottom-component {
+			background-color: #f5f5f5;
+			top:75%;
+			margin-top: 1px;
+			}
+			#right-component {
+			background-color: #f5f5f5;
+			/*                max-width:80vw;
+			min-width:80vw;
+			min-width:17em;*/
+			left: 20%;  /* Same as left component width */
+			/*margin-left: 2px;  /* Same as divider width */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" style="width:100%;padding:0px;margin:0px">
+			<div class="col-sm-12" style="margin:0px;padding:0px">
+				<div style="height:100vh">
+					<div class="split-pane fixed-left">
+						<div class="split-pane-component " id="left-component" style="background-color: #123433;">
+							<div style="background-color: #123433; padding:10px 0px 0px 0px">
+								<a id="btn_close_header" onclick="fold_left_bar();">
+									<span class="glyphicon glyphicon-menu-left" aria-hidden="true" style="z-index:100;background-color:#349895;padding:20px 0px;"></span>
+									<h4 id="header_logo" style="width:100%;text-align:center;margin:0px; border-bottom: 0px solid #d9f2f1; padding-bottom: 0px;">
+								<a  href="/">
+								<span class="glyphicon glyphicon-grain" style="padding: 5px; border: 3px solid;" aria-hidden="true"></span> 
+								<span class="to_be_hidden">
+								&nbsp;&nbsp;J#
+								</span>
+								</a>
+								</h4>
+								<span class="tagline to_be_hidden">
+									<h1 style="font-size:12px;padding:0px; margin:0px">
+										Proyecto 2 - Compiladores 2              
+									</h1>
+								</span>
+							</div>
+							<div class="to_be_hidden">
+								<ul class="nav nav-tabs nav-stacked text-center" style="background-color: #337ab7; border-bottom:1px solid #658a9e">
+									<li id="navbar-ide"><a href="/">Editor JSharp</a></li>
+									<li ><a href="/jsharp/ast/graph" target="_blank">Generar AST</a></li>
+									<li ><a href="/c3d/graph" target="_blank">Reporte Bloques</a></li>
+								</ul>
+								<div class="addthis_inline_share_toolbox"></div>
+								<!--
+									<center>
+									<script src="https://donorbox.org/install-popup-button.js" type="text/javascript" defer></script>
+									<a class="dbox-donation-button" href="https://donorbox.org/donate-to-onlinegdb" style="background:#5cb85c url(https://d1iczxrky3cnb2.cloudfront.net/white_logo.png) no-repeat 18px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 14px;padding: 6px 17px 6px 56px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #408040; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+									</center> -->
+								<footer class="container-fluid text-center" style="bottom:0px;left:0px;right:0px;position:absolute;padding:3px;">
+									<style type="text/css">
+										#footer a {
+										font-weight: normal;
+										text-decoration: none;
+										}
+										#footer a:hover {
+										color:white;
+										text-decoration: underline;
+										}
+									</style>
+									<div id="footer">
+										<span class="text-center" style="font-weight:normal; border-bottom:1px solid #658a9e">
+											<a href="./public/docs/DocumentacionJSHARP.pdf" target="_blank">Manual Gramatica</a>
+											<input type='file' accept='text/plain' id="fileUploaded" onchange='openFile(event)' style="position:fixed; top:-1000; visibility: hidden; height: 0px;"><br>
+											
+										</span>
+										<div style="clear:both"></div>
+										<span style="float:none;clear:both">&copy; 2020 Leonel Aguilar</span>
+									</div>
+								</footer>
+							</div>
+						</div>
+						<div class="split-pane-divider hide" id="my-divider"></div>
+						<div class="split-pane-component" id="right-component">
+							<input type="hidden" id="snippet_id" value="">
+							<div class="split-pane fixed-left">
+								<div class="split-pane-component" id="right-left-component">
+									<div class="split-pane fixed-top">
+										<div class="split-pane-component" id="top-component">
+											<!-- middle top start --> 
+											<div id="native-inline"></div>
+											<div id="editor-container">
+												<a name="title-bar"></a>
+												<div id="title-bar" style="padding:0px 5px;min-width:900px">
+													<div style="position:relative">
+														<!--<span class="col-sm-3" style="float:left"><b>Source Code</b></span>-->
+														<span class="col-sm-63" id="control-bar" style="float:left">
+															<span id="project_title" class="hide">
+															Codigo fuente &nbsp;&nbsp;
+															</span>
+															<script>
+
+																var openFileBtn = function(elemId){
+																	var elem = document.getElementById(elemId);
+																	if(elem && document.createEvent) {
+																		var evt = document.createEvent("MouseEvents");
+																		evt.initEvent("click", true, false);
+																		elem.dispatchEvent(evt);
+																	}
+																}
+
+																var openFile = function(event) {
+									
+																	var input = event.target;
+															
+																	var reader = new FileReader();
+																	reader.onload = function(){
+																		var text = reader.result;
+																		ide.editor.setValue(text);
+																		console.log(text);
+																	};
+																	reader.readAsText(input.files[0]);
+																};
+															</script>
+															<button type="button" id="control-btn-newfile" class="btn btn-default" data-placement="right" data-toggle="tooltip" title="New File (Ctrl + M)"><span class="glyphicon glyphicon-file"></span> Nuevo</button>
+															<button type="submit" id="control-btn-openfile" class="btn btn-info" onclick="openFileBtn('fileUploaded');" data-placement="bottom" data-toggle="tooltip" title="Ctrl+O"> <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> <span class="btn_text">Abrir</span></button>
+															<button type="button" id="control-btn-download" class="btn btn-primary" data-placement="bottom" data-toggle="tooltip" onclick="downloadCode()" title="Ctrl+S"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> <span class="btn_text">Guardar</span></button>
+															<button type="submit" id="control-btn-run" class="btn btn-success" onclick="ide.runcode()" data-placement="bottom" data-toggle="tooltip" title="F9"> <span class="glyphicon glyphicon-play" aria-hidden="true" ></span> Compilar</button>
+															<button type="submit" id="control-btn-optimize1" class="btn btn-warning" onclick="ide.optimize(1)" data-placement="bottom" data-toggle="tooltip"> <span class="glyphicon glyphicon-play-circle" aria-hidden="true" ></span> Optimizar por mirilla</button>
+															<button type="submit" id="control-btn-optimize2" class="btn btn-danger" onclick="ide.optimize(2)" data-placement="bottom" data-toggle="tooltip"> <span class="glyphicon glyphicon-play-circle" aria-hidden="true" ></span> Optimizar por bloques</button>
+														</span>
+														<span class="col-sm-64">
+															<span class=""  style="float:right;padding-right:50px;">
+																Lenguaje
+																<select id="lang-select" class="form-control" style="width:90px; display:inline; border-radius:0px;">
+																	<option disabled value> -- seleccionar -- </option>
+																	<option selected value="java">J#</option>
+																</select>
+																<button type="submit" class="btn btn-warning" onclick="ide.showinfo();">
+																<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+																<button type="submit" class="btn btn-warning" onclick="ide.showsettings();">
+																<span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+															</span>
+														</span>
+														<div id="popup-settings" style="position:absolute; right:0px; z-index:123;">
+															<div>
+																<button type="submit" style="visibility: hidden;" class="btn btn-warning" onclick=""> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+															</div>
+															<div style="background-color:#f0ad4e;padding: 15px;">
+																<p>
+																<form class="form-inline" role="form">
+																	<div class="form-group">
+																		<label for="settings-editor-theme">Tema:</label>
+																		<select class="form-control" id="settings-editor-theme">
+																			<option value="dark">Oscuro</option>
+																			<option value="light">Claro</option>
+																		</select>
+																	</div>
+																</form>
+																<p>
+																<form class="form-inline" role="form">
+																	<div class="form-group">
+																		<label for="settings-editor-font-size">Fuente:</label>
+																		<select class="form-control" id="settings-editor-font-size">
+																			<option value="small">Pequeña</option>
+																			<option value="medium" selected='selected'>Mediana</option>
+																			<option value="large">Grande</option>
+																		</select>
+																	</div>
+																</form>
+																<p>
+																<form class="form-inline" role="form">
+																	<div class="form-group">
+																		<label for="settings-editor-tab-space">Tab Space:</label>
+																		<select class="form-control" id="settings-editor-tab-space">
+																			<option value="2">2</option>
+																			<option value="4" selected="selected">4</option>
+																			<option value="8">8</option>
+																		</select>
+																	</div>
+																</form>
+																<div>
+																	<form role="form" post="#">
+																		<button type="button" class="btn btn-default" style="width:100%;" onclick="ide.closesettings();">Hecho</button>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div id="multi_editor_container">
+													<div style="clear:both; background-color:#cceeff;">
+														<ul class="editor_file_tabs nav nav-pills">
+															<li class="active">
+																<a href="#editor_1" data-toggle="tab"><span class="filename">main.jsharp</span></a>
+															</li>
+														</ul>
+													</div>
+													<div class="editor_text_panes tab-content clearfix">
+														<div id="editor_1" class="tab-pane active editor" style="position: absolute;    width:100%;    top: 52px;    bottom: 0px;">
+
+
+// Funcion de inicio del programa
+void principal(){ 
+	
+}</div>
+													</div>
+												</div>
+											</div>
+											<!-- middle top end -->
+										</div>
+										<div class="split-pane-divider" id="my-divider1"></div>
+										<div class="split-pane-component" id="bottom-component">
+											<button onclick="toggle_bottom_pane_size()">
+											<span class="btn_minmax glyphicon glyphicon-resize-full" title="Maximize"></span> 
+											</button>       
+											<button onclick="toggle_bottom_pane_size_hide()">
+											<span class="btn_hide glyphicon glyphicon-chevron-down" title="Hide"></span> 
+											</button> 
+											<button onclick="copy_output()">
+											<span class="btn_copy glyphicon glyphicon-copy" title="Copy output to clipboard"></span> 
+											</button>               
+											<!-- middle bottom start -->
+											<div id="console-wrapper" style="">
+												<div id="console-fadder">
+													<center>
+														<div class="msg-wrapper">
+															<h4 class="msg">Compiling Program...</h4>
+														</div>
+													</center>
+												</div>
+												<div id="console-title-bar">
+													<ul class="nav nav-tabs nav-justified">
+														<li class="active tab-input"><a data-toggle="tab" href="#tab-stdin">input</a></li>
+														<li class="tab-stdout" style="display:none"><a data-toggle="tab" href="#tab-stdout">stdout</a></li>
+														<li class="tab-stderr" style="display:none"><a data-toggle="tab" href="#tab-stderr">stderr</a></li>
+														<li class="tab-debug" style="display:none"><a data-toggle="tab" href="#tab-debug-console">Debug Console</a></li>
+													</ul>
+												</div>
+												<div id="console-content" class="tab-content">
+													<div id="tab-stdin" class="tab-pane fade in active">
+														<div id="stdin-wrapper" style="z-index:10;position:absolute;width:100%;height:100%;">
+															<div style="height:37px; padding:5px 10px;  position:absolute;left:0px;right:0px;">
+																<span style="float:left;width:20%;text-overflow: ellipsis;max-height:100%;overflow:hidden">Consola</span> <span style="display: block;"><br>
+																</span>
+															</div>
+															<div class="well"  style="position:absolute; padding-top:0px; width:100%;top:37px; bottom:0px;border-radius:0px;padding:9px;">
+																
+																<div id="ad_unit_bottom_wrapper">
+																	<div id="ad_unit_bottom">
+																		<div id="native-banner" class="native-standard"></div>
+																	</div>
+																</div>
+																<textarea class="form-control" id="console" placeholder="Enter input to program here" style="height:100%; resize: none;" ></textarea>
+															</div>
+														</div>
+														<div id="interactive-terminal-container" style="position:absolute; margin:0px;top:0px; bottom:0px; left:0px; right:0px;" class="col-sm-121"></div>
+													</div>
+													<div id="tab-stdout" class="tab-pane fade">
+														<div id="stdout-wrapper" class="well" style="border:none;height:100%;border-radius:0px;padding:9px; margin:0px;">
+															<span id="ide-run-result"></span>
+															<div id="stdout-container" style="position: absolute;    top: 30px;    bottom: 0px;    left: 10px;   right: 10px;">
+																<pre class="msg" style="position: absolute;    top: 0px;    bottom: 0px;    left: 0px;    right: 0px;background-color: white;"></pre>
+															</div>
+														</div>
+													</div>
+													<div id="tab-stderr" class="tab-pane fade">
+														<div id="stderr-wrapper" class="well" style="border:none;height:100%;border-radius:0px;padding:9px; margin:0px;">
+															<span id="ide-compile-result"></span>
+															<div id="stderr-container" style="position: absolute;    top: 30px;    bottom: 0px;    left: 10px;   right: 10px;">
+																<pre class="msg" style="position: absolute;    top: 0px;    bottom: 0px;    left: 0px;    right: 0px;"></pre>
+															</div>
+														</div>
+													</div>
+													<div id="tab-debug-console" class="tab-pane fade">
+														<div id="debug-console" style="border:none; height:100%; border-radius:0px;padding:0px; margin:0px;">
+															<div class="inactive-content" style="color:#bdbdbd; padding-top:15px; text-align:center">
+																<h4>
+																	Program is not being debugged. Click "Debug" button to start program in debug mode.
+																</h4>
+															</div>
+															<span id="debug-bar" style="display:none">
+															<button type="submit" id="debug_btn_run" class="btn btn-success" disabled="true" onclick="ide.debug('run')"><span class="glyphicon glyphicon-eject" aria-hidden="true" title="start"></span> start</button>
+															<button type="submit" id="debug_btn_pause" class="btn btn-warning" disabled="true" onclick="ide.debug('interrupt')"> <span class="glyphicon glyphicon-pause" aria-hidden="true" title="interrupt"></span> pause</button>
+															<button type="submit" id="debug_btn_cont" class="btn btn-primary" disabled="true" onclick="ide.debug('continue')"> <span class="glyphicon glyphicon-play" aria-hidden="true" title="continue"></span> continue</button>
+															<button type="submit" id="debug_btn_next" class="btn btn-primary" disabled="true" onclick="ide.debug('next')"> <span class="glyphicon glyphicon-step-forward" aria-hidden="true" title="next/step over"></span> step over</button>
+															<button type="submit" id="debug_btn_step" class="btn btn-primary" disabled="true" onclick="ide.debug('step')"> <span class="glyphicon glyphicon-forward" aria-hidden="true"  title="step into"></span> step into</button>
+															<button type="submit" id="debug_btn_finish" class="btn btn-primary" disabled="true" onclick="ide.debug('finish')"> <span class="glyphicon glyphicon-fast-forward" aria-hidden="true"  title="finish/step out"></span> step out</button>
+															<a class="btn btn-success" href="http://www.onlinegdb.com/blog/brief-guide-on-how-to-use-onlinegdb-debugger/" target="_blank"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Help : How to use debugger?"></span> help</a>
+															</span>
+															<div class="col-sm-121 active-content" style="position: absolute;    top: 24px;    bottom: 0px;    left: 0px;    right: 0px;">
+																<div id="terminal-container" class="col-sm-12"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- middle bottom end -->
+										</div>
+									</div>
+								</div>
+								<div class="split-pane-divider" id="my-divider2" style="width: 7px;"></div>
+								<div class="split-pane-component" id="right-right-component">
+									<!-- right component start -->
+									<div class="col-sm-41 hide" id="comment_box_wrapper" style="background-color:#bdbdbd">
+										<div class="panel-group">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" class="collapse-toggle" href="#comment_box">Comments</a>
+													</h4>
+												</div>
+												<div id="comment_box" class="collapse in">
+													<div id="comment_message_template" class="hide">
+														<li class="media">
+															<div class="media-body">
+																<div class="well well-lg">
+																	<h4 class="media-heading text-uppercase reviews">{user} </h4>
+																	<ul class="media-date text-uppercase reviews list-inline">
+																		{timestamp}
+																	</ul>
+																	<p class="media-comment">
+																		{content}
+																	</p>
+																</div>
+															</div>
+														</li>
+													</div>
+													<ul class="media-list">
+													</ul>
+													<div class="panel-footer">
+														<div class="input-group">
+															<span class="input_error_message"></span>
+														</div>
+														<div class="input-group">
+															<input type="text" class="form-control input-sm input_content" placeholder="Write your message here..." />
+															<span class="input-group-btn">
+															<button class="btn btn-primary btn-sm" id="btn-add-comment">Add Comment</button>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+                                    </div>
+									
+									<!-- TABLAS VARIAS -->
+									<div class="col-sm-41" id="debug-pan" style="background-color:#bdbdbd;">
+										<div class="panel-group">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" class="collapse-toggle" href="#debug_window_call_stack">Simbolos</a>
+													</h4>
+												</div>
+												<div id="debug_window_call_stack"  class="collapse in">
+													<div class="table-responsive">
+														<table id="tabla_simbolos" class="table table-bordered">
+															<thead>
+																<tr>
+																	<th>ID</th>
+																	<th>TIPO</th>
+																	<th>ROL</th>
+																	<th>Tamano</th>
+																	<th>Posicion</th>
+																</tr>
+															</thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" class="collapse-toggle" href="#debug_window_local_variables">Errores</a>
+													</h4>
+												</div>
+												<div id="debug_window_local_variables" class="collapse in">
+													<div class="table-responsive">
+														<table id="tabla_errores" class="table table-bordered">
+															<thead>
+																<tr>
+																	<th>Tipo</th>
+																	<th>Mensaje</th>
+																	<th>Problema</th>
+																	<th>Linea</th>
+																	<th>Columna</th>
+																</tr>
+															</thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" class="collapse-toggle" href="#optimizations_table">Optimizaciones</a>
+													</h4>
+												</div>
+												<div id="optimizations_table"  class="collapse in">
+													<div class="table-responsive">
+														<table id="tabla_optimizaciones" class="table table-bordered table-hover">
+															<thead>
+																<tr>
+																	<th>Regla</th>
+																	<th>Inicial</th>
+																	<th>Final</th>
+																	<th>Linea</th>
+																	<th>Columna</th>
+																</tr>
+															</thead>
+															<tbody></tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            
+							<script>
+								$(document).ready(function() {
+								    Mousetrap.bind('f8', function() { trace_event('Key-F8'); $('#control-btn-debug').click(); return false;});
+								    Mousetrap.bind("f9", function() { trace_event('Key-F9'); $('#control-btn-run').click(); return false;});
+								    Mousetrap.bind(['command+s', 'ctrl+s'], function() { trace_event('Key-Ctrl+S'); $('#control-btn-savefile').click(); return false; });
+								    Mousetrap.bind(['command+b', 'ctrl+o'], function() { trace_event('Key-Ctrl+B'); $('#control-btn-openfile').click(); return false; });
+								    Mousetrap.bind(['command+m', 'ctrl+n'], function() { trace_event('Key-Ctrl+M'); $('#control-btn-newfile').click(); return false; });
+								
+								    var editor = $("#multi_editor_container").editor();
+								    editor.setModeForLang($("#lang-select").val());
+								
+								    editor.addEventListener('breakpoint_set', function (e) { 
+								        var bp = e.breakpoint;
+								        ide.setBreakpoint(bp);
+								    });
+								    editor.addEventListener('breakpoint_unset', function (e) { 
+								        var bp = e.breakpoint;
+								        ide.clearBreakpoint(bp);
+								    });
+								    $("#control-btn-newfile").on('click', function(){
+								        editor.new_editor();
+								    });
+								
+								    $("#control-btn-save").on('click', function(){
+								        saveCode();
+								    });  
+								
+                                    ide.editor = editor;    
+                                    
+									enable_btn('control-btn-',['save','share','beautify','download']);      
+									
+
+                                });
+                                
+								/*
+                                ace.require("ace/ext/language_tools");
+                                var editor = ace.edit("editor1");
+                                var editor2 = ace.edit("editor2");
+                                editor.getSession().setTabSize(4);
+                                editor.setFontSize('medium');
+                                editor.setTheme("ace/theme/idle_fingers");
+                                editor.getSession().setMode("ace/mode/c_cpp");
+                                // enable autocompletion and snippets
+                                editor.setOptions({
+                                    enableBasicAutocompletion: true,
+                                    enableSnippets: true,
+                                    enableLiveAutocompletion: true
+                                });
+                                editor.on("guttermousedown", function(e){ 
+                                // if(!ide.gdbstarted) return;
+                                    var Range = ace.require('ace/range').Range;
+
+                                    var target = e.domEvent.target; 
+                                    if (target.className.indexOf("ace_gutter-cell") == -1) 
+                                        return; 
+
+                                    if (e.clientX > 25 + target.getBoundingClientRect().left) 
+                                        return; 
+
+                                    var row = e.getDocumentPosition().row 
+
+                                    if (target.className.indexOf("ace_breakpoint") == -1)
+                                        ide.setBreakpoint(row+1, true);//e.editor.session.setBreakpoint(row)
+                                    else
+                                        ide.clearBreakpoint(row+1, true);//e.editor.session.clearBreakpoint(row)
+                                    e.stop() 
+                                }); 
+                                
+                                editor.addBreakpoint = function(line, breaknumber) {
+                                    if(!editor.breakpointList){
+                                        editor.breakpointList = [];
+                                    }
+                                    editor.breakpointList[breaknumber] = line;
+                                    console.log(editor.breakpointList);
+                                }
+                                */
+
+                                var project_uid = null;	
+                                
+                                $(document).ready(function() {
+                                    $('div.split-pane').splitPane();
+                                });
+
+                            </script>                            
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		        
+		<!-- generic modal -->
+		<div id="genericModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="ok-btn btn btn-default" data-dismiss="modal">Ok</button>
+					</div>
+				</div>
+			</div>
+        </div>
+                
+		<!-- Code Save Modal -->
+		<div id="saveCodeModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Save Project</h4>
+					</div>
+					<div class="modal-body">
+						<div>
+							<form>
+								<div class="form-group">
+									<label for="name" class="name_label">Name of Project:</label>
+									<input type="text" class="form-control" id="project_name" value="">
+								</div>
+								<button type="button"  class="btn btn-default btn_save">Save</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+        
+		<!-- Delete file Modal -->
+		<div id="deleteFileModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<center>
+							<h4 class="modal-title">Estas seguro que deseas eliminar el archivo `<span id='delete_file_name'></span>`?</h4>
+						</center>
+					</div>
+					<div class="modal-body">
+						<center>
+							<button type="button" class="btn btn-default btn-ok">Yes</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+						</center>
+					</div>
+				</div>
+			</div>
+        </div>
+        
+		<!-- generic confirm Modal -->
+		<div id="confirmModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<center>
+							<h4 class="modal-title"></h4>
+						</center>
+					</div>
+					<div class="modal-body">
+						<center>
+							<button type="button" class="btn btn-default btn-ok">Yes</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+						</center>
+					</div>
+				</div>
+			</div>
+        </div>
+        
+		<!-- New file Modal -->
+		<div id="newFileModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Nuevo archivo</h4>
+					</div>
+					<div class="modal-body">
+						<div>
+							<form>
+								<div class="form-group">
+									<label for="name">Nuevo nombre:</label>
+									<input type="text" class="form-control" id="new_file_name" value="untitled">
+								</div>
+								<button type="button" class="btn btn-default btn-ok">ok</button>
+								<span class="error_message"></span>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+        
+		<!-- Rename file Modal -->
+		<div id="renameFileModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Renombrar archivo</h4>
+					</div>
+					<div class="modal-body">
+						<div>
+							<form>
+								<div class="form-group">
+									<label for="name">Nuevo Nombre:</label>
+									<input type="text" class="form-control" id="edit_file_name" value="">
+								</div>
+								<button type="button" class="btn btn-default btn-ok">ok</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">cancelar</button>
+								<span class="error_message"></span>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		        
+		<!-- Server disconnected Modal -->
+		<div id="serverDisconnectedModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Error</h4>
+					</div>
+					<div class="modal-body">
+						<p>Por el momento no se puede conectar al servidor... Por favor intenta en unos momentos.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		                
+		<!-- Editor Info Modal -->
+		<div id="infoModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Teclas Rapidas</h4>
+					</div>
+					<div class="modal-body">
+						<pre>
+                            <b>IDE:</b>
+                            Nuevo Archivo : Ctrl-M
+                            Compilar : F9
+                            Depurar : F8
+                            Guardar : Ctrl-S
+                            Abrir : Ctrl-O
+                            Ajustes : Ctrl-Shift-S
+                            Informacion : Ctrl-I
+                        </pre>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
