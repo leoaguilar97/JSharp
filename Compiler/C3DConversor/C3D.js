@@ -440,7 +440,9 @@ class C3DConversor {
             let pastK = this.info.getK();
 
             if (value == null) {
-                this.info.heap("-1");
+                let tmp = this.info.createTemporal();
+                this.info.add(`${tmp} = 0 - 1;`)
+                this.info.heap(`${tmp}`);
             }
             else {
                 for (let i = 0; i < value.length; i++) {
