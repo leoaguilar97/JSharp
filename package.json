@@ -22,7 +22,7 @@
   "homepage": "https://github.com/leoaguilar97/jsharp#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jison": "^0.4.18",
     "nodemon": "^1.18.10",
     "path": "^0.12.7"
